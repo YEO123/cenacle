@@ -1,0 +1,12 @@
+services:
+  app:
+    build: .
+    container_name: cenacle-dashboard
+    ports:
+      - "3000:3000"
+    volumes:
+      - cenacle-data:/app/data
+    restart: unless-stopped
+
+volumes:
+  cenacle-data:
