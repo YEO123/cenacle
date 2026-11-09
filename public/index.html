@@ -3,89 +3,62 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Cénacle — Dashboard</title>
-  <link rel="icon" href="logo.png">
-  <link rel="stylesheet" href="style.css">
+  <title>Vigile de Gloire 2026 — Cénacle</title>
+  <link rel="icon" href="/logo.png">
+  <link rel="stylesheet" href="/style.css">
 </head>
-<body>
-  <header class="topbar">
-    <img src="logo.png" alt="Apostolat Missionnaire du Cénacle" class="logo">
-    <div class="brand">
-      <h1>Apostolat Missionnaire du Cénacle</h1>
-      <span class="subtitle">Tableau de bord</span>
-    </div>
-  </header>
+<body class="public">
+  <main class="public-card">
+    <img src="/logo.png" alt="Apostolat Missionnaire du Cénacle" class="public-logo">
 
-  <main class="container">
-    <section class="stats">
-      <div class="stat"><span class="stat-label">Total</span><span class="stat-value" id="stat-total">0</span></div>
-      <div class="stat"><span class="stat-label">Femmes</span><span class="stat-value" id="stat-f">0</span></div>
-      <div class="stat"><span class="stat-label">Hommes</span><span class="stat-value" id="stat-m">0</span></div>
-      <div class="stat"><span class="stat-label">Anniversaires ce mois</span><span class="stat-value" id="stat-anniv">0</span></div>
-    </section>
+    <form id="form" novalidate>
+      <h1 class="welcome"><span>Bienvenue à la</span> <span class="welcome-main">Vigile de Gloire 2026</span></h1>
+      <p class="intro">Merci de renseigner vos informations.</p>
 
-    <section class="card">
-      <div class="card-head">
-        <h2>Membres</h2>
-        <div class="actions">
-          <input type="search" id="search" placeholder="Rechercher…">
-          <button class="btn btn-primary" id="btn-add">+ Ajouter</button>
+      <label>Nom *<input name="nom" required maxlength="200" autocomplete="family-name"></label>
+      <label>Prénoms *<input name="prenoms" required maxlength="200" autocomplete="given-name"></label>
+      <label>Date de naissance *<input name="date_naissance" type="date" required autocomplete="bday"></label>
+      <label>Pays *<select name="pays" id="pays" required autocomplete="country"></select></label>
+      <label>Adresse *<input name="adresse" required maxlength="200" autocomplete="street-address"></label>
+      <div class="row">
+        <label><span>Code postal <span id="cp-mark">*</span></span><input name="code_postal" id="code_postal" required maxlength="20" autocomplete="postal-code"></label>
+        <label>Ville *<input name="ville" required maxlength="200" autocomplete="address-level2"></label>
+      </div>
+
+      <div class="phone">
+        <label for="telephone">Téléphone *</label>
+        <div class="phone-field">
+          <div class="phone-dial">
+            <span id="dial-display" aria-hidden="true"></span>
+            <select name="indicatif" id="indicatif" aria-label="Indicatif du pays" required></select>
+          </div>
+          <input id="telephone" name="telephone" type="tel" required maxlength="25" autocomplete="tel-national">
         </div>
       </div>
+      <label>Email<input name="email" type="email" maxlength="200" autocomplete="email"></label>
 
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Nom</th><th>Prénom</th><th>Email</th><th>Téléphone</th>
-              <th>Adresse</th><th>Sexe</th><th>Anniversaire</th><th class="right">Actions</th>
-            </tr>
-          </thead>
-          <tbody id="rows"></tbody>
-        </table>
-        <p class="empty" id="empty" hidden>Aucune donnée. Cliquez sur « Ajouter » pour commencer.</p>
-      </div>
+      <!-- Piège à robots : invisible pour les visiteurs -->
+      <label class="trap" aria-hidden="true">Site web<input name="site_web" tabindex="-1" autocomplete="off"></label>
+
+      <label class="consent">
+        <input type="checkbox" name="consentement" required>
+        <span>
+          J'accepte que l'Apostolat Missionnaire du Cénacle conserve les données
+          ci-dessus et les utilise pour m'informer de ses prochains programmes. Je peux retirer ce consentement
+          à tout moment auprès de ses responsables : mes données seront alors supprimées.
+        </span>
+      </label>
+
+      <p class="error" id="form-error" role="alert" hidden></p>
+      <button type="submit" class="btn btn-primary btn-block" id="submit">Envoyer</button>
+    </form>
+
+    <section id="thanks" class="thanks" hidden>
+      <h1>Merci !</h1>
+      <p>Votre inscription est bien enregistrée.</p>
     </section>
   </main>
 
-  <!-- Popup formulaire -->
-  <dialog id="modal">
-    <form id="form" method="dialog">
-      <h3 id="modal-title">Ajouter</h3>
-      <input type="hidden" name="id">
-      <div class="grid">
-        <label>Nom *<input name="nom" required></label>
-        <label>Prénom *<input name="prenom" required></label>
-        <label>Email<input name="email" type="email"></label>
-        <label>Téléphone<input name="telephone" type="tel"></label>
-        <label>Sexe *
-          <select name="sexe" required>
-            <option value="" disabled selected>Choisir…</option>
-            <option value="F">F</option>
-            <option value="M">M</option>
-          </select>
-        </label>
-        <label>Date d'anniversaire<input name="anniversaire" type="date"></label>
-        <label>Adresse<input name="adresse"></label>
-      </div>
-      <p class="error" id="form-error" hidden></p>
-      <div class="modal-actions">
-        <button type="button" class="btn" id="btn-cancel">Annuler</button>
-        <button type="submit" class="btn btn-primary">Enregistrer</button>
-      </div>
-    </form>
-  </dialog>
-
-  <!-- Popup confirmation suppression -->
-  <dialog id="confirm">
-    <h3>Supprimer ?</h3>
-    <p id="confirm-text"></p>
-    <div class="modal-actions">
-      <button class="btn" id="confirm-no">Annuler</button>
-      <button class="btn btn-danger" id="confirm-yes">Supprimer</button>
-    </div>
-  </dialog>
-
-  <script src="app.js"></script>
+  <script type="module" src="/inscription.js"></script>
 </body>
 </html>

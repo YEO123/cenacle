@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cénacle — Dashboard</title>
+  <link rel="icon" href="/logo.png">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <img src="/logo.png" alt="Apostolat Missionnaire du Cénacle" class="logo">
+    <div class="brand">
+      <h1>Apostolat Missionnaire du Cénacle</h1>
+      <span class="subtitle">Membres</span>
+    </div>
+    <nav class="nav">
+      <a href="/admin/">Inscriptions</a>
+      <a href="/admin/membres" aria-current="page">Membres</a>
+      <button class="btn btn-sm" id="logout">Déconnexion</button>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="stats">
+      <div class="stat"><span class="stat-label">Total</span><span class="stat-value" id="stat-total">0</span></div>
+      <div class="stat"><span class="stat-label">Femmes</span><span class="stat-value" id="stat-f">0</span></div>
+      <div class="stat"><span class="stat-label">Hommes</span><span class="stat-value" id="stat-m">0</span></div>
+      <div class="stat"><span class="stat-label">Anniversaires ce mois</span><span class="stat-value" id="stat-anniv">0</span></div>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <h2>Membres</h2>
+        <div class="actions">
+          <input type="search" id="search" placeholder="Rechercher…">
+          <button class="btn btn-primary" id="btn-add">+ Ajouter</button>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Nom</th><th>Prénom</th><th>Email</th><th>Téléphone</th>
+              <th>Adresse</th><th>Sexe</th><th>Anniversaire</th><th class="right">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+        <p class="empty" id="empty" hidden>Aucune donnée. Cliquez sur « Ajouter » pour commencer.</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Popup formulaire -->
+  <dialog id="modal">
+    <form id="form" method="dialog">
+      <h3 id="modal-title">Ajouter</h3>
+      <input type="hidden" name="id">
+      <div class="grid">
+        <label>Nom *<input name="nom" required></label>
+        <label>Prénom *<input name="prenom" required></label>
+        <label>Email<input name="email" type="email"></label>
+        <label>Téléphone<input name="telephone" type="tel"></label>
+        <label>Sexe *
+          <select name="sexe" required>
+            <option value="" disabled selected>Choisir…</option>
+            <option value="F">F</option>
+            <option value="M">M</option>
+          </select>
+        </label>
+        <label>Date d'anniversaire<input name="anniversaire" type="date"></label>
+        <label>Adresse<input name="adresse"></label>
+      </div>
+      <p class="error" id="form-error" hidden></p>
+      <div class="modal-actions">
+        <button type="button" class="btn" id="btn-cancel">Annuler</button>
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Popup confirmation suppression -->
+  <dialog id="confirm">
+    <h3>Supprimer ?</h3>
+    <p id="confirm-text"></p>
+    <div class="modal-actions">
+      <button class="btn" id="confirm-no">Annuler</button>
+      <button class="btn btn-danger" id="confirm-yes">Supprimer</button>
+    </div>
+  </dialog>
+
+  <script src="/admin/nav.js"></script>
+  <script src="/admin/membres.js"></script>
+</body>
+</html>

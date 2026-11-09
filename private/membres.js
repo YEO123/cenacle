@@ -13,7 +13,9 @@ const thisMonth = String(new Date().getMonth() + 1).padStart(2, '0');
 const esc = (v) => String(v ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
 async function load() {
-  items = await (await fetch(API)).json();
+  const res = await fetch(API);
+  if (res.status === 401) return location.assign('/login');
+  items = await res.json();
   render();
 }
 

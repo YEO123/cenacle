@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inscriptions — Cénacle</title>
+  <link rel="icon" href="/logo.png">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <img src="/logo.png" alt="Apostolat Missionnaire du Cénacle" class="logo">
+    <div class="brand">
+      <h1>Apostolat Missionnaire du Cénacle</h1>
+      <span class="subtitle">Inscriptions</span>
+    </div>
+    <nav class="nav">
+      <a href="/admin/" aria-current="page">Inscriptions</a>
+      <a href="/admin/membres">Membres</a>
+      <button class="btn btn-sm" id="logout">Déconnexion</button>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="stats">
+      <div class="stat"><span class="stat-label">Inscrits</span><span class="stat-value" id="stat-total">0</span></div>
+      <div class="stat"><span class="stat-label">Île-de-France</span><span class="stat-value" id="stat-idf">0</span></div>
+      <div class="stat"><span class="stat-label">Rennes</span><span class="stat-value" id="stat-rennes">0</span></div>
+      <div class="stat"><span class="stat-label">Autres régions</span><span class="stat-value" id="stat-regions">0</span></div>
+      <div class="stat"><span class="stat-label">Étranger</span><span class="stat-value" id="stat-etranger">0</span></div>
+    </section>
+
+    <section class="charts">
+      <article class="card chart-card chart-wide">
+        <h2>Répartition en France</h2>
+        <div id="chart-zones"></div>
+      </article>
+      <article class="card chart-card">
+        <h2>Pays</h2>
+        <div id="chart-pays"></div>
+      </article>
+      <article class="card chart-card">
+        <h2>Tranches d'âge</h2>
+        <div id="chart-ages"></div>
+      </article>
+      <article class="card chart-card qr-card">
+        <h2>QR code d'inscription</h2>
+        <img id="qr" alt="QR code du formulaire d'inscription" hidden>
+        <p class="qr-url" id="qr-url"></p>
+        <p class="qr-warning" id="qr-warning" hidden>
+          Ce QR code pointe vers cette machine : il ne fonctionnera pas sur les téléphones.
+          Ouvrez cette page depuis l'adresse publique du site ou renseignez PUBLIC_URL.
+        </p>
+        <a class="btn" id="qr-download" download="qr-inscription-cenacle.png">Télécharger</a>
+      </article>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <h2>Personnes inscrites</h2>
+        <div class="actions">
+          <input type="search" id="search" placeholder="Rechercher…">
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Inscription</th><th>Nom</th><th>Prénoms</th><th>Naissance</th><th>Téléphone</th><th>Email</th><th>Adresse</th>
+              <th>Code postal</th><th>Ville</th><th>Pays</th><th>Zone</th><th>Consentement</th>
+              <th class="right">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+        <p class="empty" id="empty" hidden>Aucune inscription pour le moment.</p>
+      </div>
+    </section>
+  </main>
+
+  <div class="tooltip" id="tooltip" role="status" hidden></div>
+
+  <dialog id="confirm">
+    <h3>Supprimer ?</h3>
+    <p id="confirm-text"></p>
+    <div class="modal-actions">
+      <button class="btn" id="confirm-no">Annuler</button>
+      <button class="btn btn-danger" id="confirm-yes">Supprimer</button>
+    </div>
+  </dialog>
+
+  <script src="/admin/nav.js"></script>
+  <script src="/admin/admin.js"></script>
+</body>
+</html>
