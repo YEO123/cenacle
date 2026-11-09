@@ -265,6 +265,46 @@ app.get('/api/inscriptions', requireApi, (req, res) => {
   res.json(rows.map(({ dedupe_key, ...row }) => ({ ...row, zone: zoneOf(row) })));
 });
 
+const countryNames = new Intl.DisplayNames(['fr'], { type: 'region' });
+const fmtDate = (d) => d.split('-').reverse().join('/');
+const fmtDateTime = (d) =>
+  new Date(`${d.replace(' ', 'T')}Z`).toLocaleString('fr-FR', { timeZone: 'Europe/Paris', dateStyle: 'short', timeStyle: 'short' });
+
+// Empêche Excel d'exécuter comme formule un texte saisi dans le formulaire public
+const csvText = (v) => (/^[=+\-@\t\r]/.test(v) ? `'${v}` : v);
+const csvCell = (v) => `"${String(v).replace(/"/g, '""')}"`;
+
+const CSV_COLUMNS = [
+  ['Inscription', (r) => fmtDateTime(r.created_at)],
+  ['Genre', (r) => r.genre],
+  ['Nom', (r) => csvText(r.nom)],
+  ['Prénoms', (r) => csvText(r.prenoms)],
+  ['Date de naissance', (r) => fmtDate(r.date_naissance)],
+  ['Téléphone', (r) => r.telephone],
+  ['Email', (r) => csvText(r.email)],
+  ['Adresse', (r) => csvText(r.adresse)],
+  ['Code postal', (r) => csvText(r.code_postal)],
+  ['Ville', (r) => csvText(r.ville)],
+  ['Pays', (r) => countryNames.of(r.pays)],
+  ['Zone', (r) => zoneOf(r)],
+  ['Consentement', (r) => fmtDateTime(r.consentement_at)],
+];
+
+app.get('/api/inscriptions.csv', requirePage, (req, res) => {
+  const rows = db.prepare('SELECT * FROM inscriptions ORDER BY id DESC').all();
+  const lines = [
+    CSV_COLUMNS.map(([title]) => csvCell(title)),
+    ...rows.map((row) => CSV_COLUMNS.map(([, value]) => csvCell(value(row)))),
+  ].map((cells) => cells.join(';'));
+  const date = new Date().toISOString().slice(0, 10);
+  res.set({
+    'Content-Type': 'text/csv; charset=utf-8',
+    'Content-Disposition': `attachment; filename="inscriptions-cenacle-${date}.csv"`,
+  });
+  // Point-virgule et BOM : ouverture correcte des accents et des colonnes dans Excel en français
+  res.send(`\uFEFF${lines.join('\r\n')}\r\n`);
+});
+
 app.delete('/api/inscriptions/:id', requireApi, (req, res) => {
   const r = db.prepare('DELETE FROM inscriptions WHERE id = ?').run(req.params.id);
   if (r.changes === 0) return res.status(404).json({ error: 'Introuvable' });

@@ -149,3 +149,5 @@ h1.welcome .welcome-main { font-size: clamp(27px, 8.2vw, 36px); font-style: norm
 .genre input:focus-visible + span { outline: 2px solid var(--gold); outline-offset: 1px; }
 
 .thanks p.blessing { margin-top: 20px; color: var(--primary); font-family: Georgia, serif; font-size: 20px; font-style: italic; }
+
+.actions a.btn { color: var(--text); text-decoration: none; }
