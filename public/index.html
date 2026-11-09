@@ -15,6 +15,14 @@
       <h1 class="welcome"><span>Bienvenue à la</span> <span class="welcome-main">Vigile de Gloire 2026</span></h1>
       <p class="intro">Merci de renseigner vos informations.</p>
 
+      <fieldset class="genre">
+        <legend>Genre *</legend>
+        <div class="genre-options">
+          <label><input type="radio" name="genre" value="F" required><span>F</span></label>
+          <label><input type="radio" name="genre" value="M" required><span>M</span></label>
+        </div>
+      </fieldset>
+
       <label>Nom *<input name="nom" required maxlength="200" autocomplete="family-name"></label>
       <label>Prénoms *<input name="prenoms" required maxlength="200" autocomplete="given-name"></label>
       <label>Date de naissance *<input name="date_naissance" type="date" required autocomplete="bday"></label>
@@ -56,6 +64,7 @@
     <section id="thanks" class="thanks" hidden>
       <h1>Merci !</h1>
       <p>Votre inscription est bien enregistrée.</p>
+      <p class="blessing">Bonne prière, Dieu vous bénisse !</p>
     </section>
   </main>
 

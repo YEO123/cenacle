@@ -126,6 +126,7 @@ function renderTable() {
       <td>${esc(fmtDateTime(m.created_at))}</td>
       <td>${esc(m.nom)}</td>
       <td>${esc(m.prenoms)}</td>
+      <td>${m.genre ? `<span class="badge ${esc(m.genre)}">${esc(m.genre)}</span>` : '—'}</td>
       <td>${esc(fmtDate(m.date_naissance))}</td>
       <td>${esc(m.telephone) || '—'}</td>
       <td>${esc(m.email) || '—'}</td>

@@ -139,3 +139,13 @@ h1.welcome .welcome-main { font-size: clamp(27px, 8.2vw, 36px); font-style: norm
 .phone-dial select { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; font-size: 16px; cursor: pointer; }
 .phone-field input { flex: 1; min-width: 0; border: none; background: transparent; padding: 11px 12px; font-size: 16px; color: var(--text); outline: none; border-radius: 0 8px 8px 0; }
 .phone-field input::placeholder { color: #b9a78c; }
+
+.genre { border: none; margin: 0; padding: 0; min-width: 0; }
+.genre legend { padding: 0 0 6px; font-size: 13px; color: var(--muted); }
+.genre-options { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.public-card .genre input { position: absolute; opacity: 0; width: 0; height: 0; padding: 0; }
+.genre span { display: block; padding: 11px; border: 1px solid var(--border); border-radius: 8px; background: #fff; color: var(--text); font-size: 16px; font-weight: 600; text-align: center; cursor: pointer; }
+.genre input:checked + span { background: var(--primary); border-color: var(--primary); color: #fff; }
+.genre input:focus-visible + span { outline: 2px solid var(--gold); outline-offset: 1px; }
+
+.thanks p.blessing { margin-top: 20px; color: var(--primary); font-family: Georgia, serif; font-size: 20px; font-style: italic; }

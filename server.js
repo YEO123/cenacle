@@ -55,6 +55,7 @@ db.exec(`
     date_naissance       TEXT NOT NULL,
     telephone            TEXT NOT NULL DEFAULT '',
     email                TEXT NOT NULL DEFAULT '',
+    genre                TEXT NOT NULL DEFAULT '',
     consentement_at      TEXT NOT NULL,
     consentement_version TEXT NOT NULL,
     dedupe_key           TEXT NOT NULL UNIQUE,
@@ -69,6 +70,7 @@ db.exec(`
 const inscriptionCols = db.prepare('PRAGMA table_info(inscriptions)').all().map((c) => c.name);
 if (!inscriptionCols.includes('telephone')) db.exec("ALTER TABLE inscriptions ADD COLUMN telephone TEXT NOT NULL DEFAULT ''");
 if (!inscriptionCols.includes('email')) db.exec("ALTER TABLE inscriptions ADD COLUMN email TEXT NOT NULL DEFAULT ''");
+if (!inscriptionCols.includes('genre')) db.exec("ALTER TABLE inscriptions ADD COLUMN genre TEXT NOT NULL DEFAULT ''");
 
 const FIELDS = ['nom', 'prenom', 'email', 'telephone', 'adresse', 'sexe', 'anniversaire'];
 
@@ -83,7 +85,7 @@ function clean(body) {
 
 // À incrémenter si le texte de la case de consentement change dans public/index.html
 const CONSENT_VERSION = 'v1';
-const INSCRIPTION_FIELDS = ['nom', 'prenoms', 'adresse', 'code_postal', 'ville', 'pays', 'date_naissance', 'telephone', 'email'];
+const INSCRIPTION_FIELDS = ['nom', 'prenoms', 'adresse', 'code_postal', 'ville', 'pays', 'date_naissance', 'telephone', 'email', 'genre'];
 const MAX_LENGTH = 200;
 
 function isValidBirthDate(value) {
@@ -112,6 +114,7 @@ function cleanInscription(body) {
   const data = {};
   for (const f of INSCRIPTION_FIELDS) data[f] = (body?.[f] ?? '').toString().trim();
   if (INSCRIPTION_FIELDS.some((f) => data[f].length > MAX_LENGTH)) return { error: 'Un des champs est trop long.' };
+  if (!['F', 'M'].includes(data.genre)) return { error: 'Merci de choisir F ou M.' };
   if (['nom', 'prenoms', 'adresse', 'ville', 'telephone'].some((f) => !data[f])) return { error: 'Merci de remplir tous les champs.' };
   if (!COUNTRY_CODES.includes(data.pays)) return { error: 'Pays invalide.' };
   if (data.pays === 'FR' && !/^\d{5}$/.test(data.code_postal)) return { error: 'Le code postal doit contenir 5 chiffres.' };
@@ -250,9 +253,9 @@ app.post('/api/inscriptions', (req, res) => {
   const dedupeKey = [normalize(data.nom), normalize(data.prenoms), data.date_naissance].join('|');
   db.prepare(
     `INSERT OR IGNORE INTO inscriptions
-       (nom, prenoms, adresse, code_postal, ville, pays, date_naissance, telephone, email,
+       (nom, prenoms, adresse, code_postal, ville, pays, date_naissance, telephone, email, genre,
         consentement_at, consentement_version, dedupe_key)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'), ?, ?)`
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'), ?, ?)`
   ).run(...INSCRIPTION_FIELDS.map((f) => data[f]), CONSENT_VERSION, dedupeKey);
   res.status(201).json({ ok: true });
 });
